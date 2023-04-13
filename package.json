@@ -6,11 +6,12 @@
   },
   "name": "fsjs_backend",
   "description": "Starting Backend with a project",
+  "type": "module",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js"
   },
   "author": "",
   "license": "ISC"
