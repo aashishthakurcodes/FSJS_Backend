@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 import app from "./app.js";
+import config from "../config/index.js";
 
 (async () => {
     try {
-        await mongoose.connect("mongodb://localhost:27017/ecomm");
+        await mongoose.connect(config.Mongo_url);
         console.log("Database connected");
 
         app.on('error',(err)=>{
@@ -11,9 +12,9 @@ import app from "./app.js";
             throw err;
         })
         const onlistening = () => {
-            console.log(`listening on port 500`);
+            console.log(`listening on port ${config.PORT}`);
         }
-        app.listen(5000, onlistening)
+        app.listen(config.PORT, onlistening)
     }
 
 
