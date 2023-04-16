@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Authroles from "../utilis/setauthor";
+import bcrypt from 'bcryptjs'
 
 const userSchema= new mongoose.Schema({
     name:
@@ -28,5 +29,22 @@ const userSchema= new mongoose.Schema({
     forgetPasswordExpiry: Date
 },{timestamps:true})
 
+//Encrypt the password before saving: HOOKS
+
+userSchema.pre("save", async function(next){
+    if (!this.isModified("password")) return next()
+    this.password = await bcrypt.hash(this.password, 10)
+    next()
+})
+
+// Compare passwords
+userSchema.methods = {
+    //compare password
+    comparePassword: async function(enteredPassword){
+        return await bcrypt.compare(enteredPassword, this.password)
+    }
+}
+
+//Generating token
 
 export default mongoose.model("User","userschena")
