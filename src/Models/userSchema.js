@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import Authroles from "../utilis/setauthor";
 import bcrypt from 'bcryptjs'
+import JWT from "jsonwebtoken";
+import config from "/workspaces/FSJS_Backend/config/index.js";
+import crypto from "crypto"
 
 const userSchema= new mongoose.Schema({
     name:
@@ -37,14 +40,38 @@ userSchema.pre("save", async function(next){
     next()
 })
 
-// Compare passwords
+// Compare Enter password8 passwords
 userSchema.methods = {
     //compare password
     comparePassword: async function(enteredPassword){
         return await bcrypt.compare(enteredPassword, this.password)
+    },
+    //Generate Json web tokens
+
+    // jwt.sign(payload, secretOrPrivateKey, [options, callback])
+    getJWTtoken:function(){
+       JWT.sign({_id: this._id ,role:this.role},config.JWT_SECRET,{
+        expiresIn:config.JWT_EXPIRY
+       })
+    },
+
+    //Forget password generate token
+    generateForgettoken: function(){
+        //create random text of twenty number
+     const forgottoken =crypto.randomBytes(20).toString("hex")
+     // encrypt the token by crypto
+     this.forgetaPasswordToken=crypto.createHash("sha256").update(forgottoken).digest("hex")
+
+    //time for token to expire
+
+    this.forgetPasswordExpiry=Date.now() + 10*60*1000;
+
+    return forgottoken;
+
+
+
+
     }
 }
-
-//Generating token
 
 export default mongoose.model("User","userschena")
