@@ -30,7 +30,9 @@ const productSchema= new mongoose.Schema({
         default:0
     },
   collectionid:{
+    type:mongoose.Schema.Types.ObjectId,
     ref:"collecton"
+    
   }
 
 },{timestamps:true})
