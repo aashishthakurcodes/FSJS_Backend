@@ -53,3 +53,34 @@ export const signup=asynHandler(async(req , res)=>{
         User,
      })
 })
+
+
+export const login=asynHandler(async(req,res)=>{
+   const {email,password}=req.body
+
+   //Validation
+   if(!email || !password){
+      throw new customerrors("Please enter all details",400 )
+
+   }
+   const user= User.findOne({email}).select("+password");
+   if(!user){
+      throw new customerrors("invalid Record",400)
+   }
+   
+   const pssmatch=await user.comparePassword(password)
+
+   if(pssmatch){
+const token=  user.getJWTtoken()
+user.password=undefined
+     res.cookie("token",token,cookieOption)
+     return res.status(200).json({
+      success:true,
+      token,user
+     })
+   }
+
+
+throw new customerrors("Password is incorrect",400)
+
+})
