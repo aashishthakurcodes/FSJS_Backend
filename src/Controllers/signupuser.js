@@ -84,3 +84,16 @@ user.password=undefined
 throw new customerrors("Password is incorrect",400)
 
 })
+
+
+export const logout=asynHandler(async(res,req)=>{
+   res.cookie("token",null,{
+      expires:new Date(Date.now()),
+      httpOnly:true
+   })
+ res.status(200).json({
+   success:true,
+   message:"Logout"
+ })
+
+})
