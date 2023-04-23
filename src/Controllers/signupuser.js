@@ -97,3 +97,15 @@ export const logout=asynHandler(async(res,req)=>{
  })
 
 })
+
+export const getprofile=asynHandler(async(req,res)=>{
+   const {User}=req
+
+   if(!User){
+      throw new customerrors("User not found",401)
+   }
+   res.status(200).json({
+      success:true,
+      User
+   })
+})
